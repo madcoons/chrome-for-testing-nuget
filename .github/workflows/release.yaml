@@ -60,13 +60,13 @@ jobs:
 
             docker build . -f Dockerfile.BuildLinux64 -t chrome-linux64:latest --build-arg CHROME_VERSION=${{ env.CHROME_VERSION }}
             docker create --name chrome-linux64 chrome-linux64:latest
-            docker cp chrome-linux64:/chrome-linux64.tar.gz chrome-linux64-${CHROME_VERSION}.tar.gz
+            docker cp chrome-linux64:/chrome-linux64.tar.gz chrome-linux64.tar.gz
 
         - name: Upload Artifact
           uses: actions/upload-artifact@v4
           with:
             name: chrome-linux64
-            path: chrome-linux64-${{ env.CHROME_VERSION }}.tar.gz
+            path: chrome-linux64.tar.gz
 
     Release:
         needs:
@@ -87,7 +87,7 @@ jobs:
         - run: |
             set -e
             gh release create v${{ env.NUGET_PACKAGE_VERSION }} --title "Chrome v${{ env.NUGET_PACKAGE_VERSION }}" \
-              chrome-linux64/chrome-linux64-${{ env.CHROME_VERSION }}.tar.gz
+              chrome-linux64/chrome-linux64.tar.gz
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
