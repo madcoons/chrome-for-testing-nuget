@@ -72,7 +72,7 @@ RUN /chrome/chrome --no-sandbox --headless --screenshot=/chrome-screenshot.png -
 # We need this wrapper to start chrome with additional env variables
 FROM gcc:latest as entry-builder
 COPY main.c .
-RUN gcc -o /chrome-entry main.c -static
+RUN gcc -o /chrome-entry main.c -static -O3
 
 
 #################################
