@@ -6,7 +6,8 @@ ARG CHROME_VERSION
 
 ADD https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}/linux64/chrome-linux64.zip .
 RUN unzip chrome-linux64.zip -d /
-WORKDIR /chrome-linux64
+RUN mv /chrome-linux64 /chrome
+WORKDIR /chrome
 
 # patch elf
 ARG RPATH='$ORIGIN/../lib/x86_64-linux-gnu'
@@ -62,10 +63,10 @@ RUN apt-get update && apt-get install -y \
     libxtst6 \
     && apt-get clean
 
-COPY --from=chrome-app /chrome-linux64 /chrome-linux64
+COPY --from=chrome-app /chrome /chrome
 
 # Ensure chrome runs
-RUN /chrome-linux64/chrome --no-sandbox --headless --screenshot=/chrome-screenshot.png --window-size=500x500 --disable-dev-shm-usage "https://www.google.com"
+RUN /chrome/chrome --no-sandbox --headless --screenshot=/chrome-screenshot.png --window-size=500x500 --disable-dev-shm-usage "https://www.google.com"
 
 
 # We need this wrapper to start chrome with additional env variables
@@ -89,8 +90,8 @@ COPY --from=ubuntu-with-chrome-deps /lib ./lib
 COPY --from=ubuntu-with-chrome-deps /lib64 ./lib64
 COPY --from=ubuntu-with-chrome-deps /usr ./usr
 
-COPY --from=chrome-app /chrome-linux64 ./chrome-linux64
-WORKDIR /chrome-root/chrome-linux64
+COPY --from=chrome-app /chrome ./chrome
+WORKDIR /chrome-root/chrome
 COPY --from=entry-builder /chrome-entry .
 
 ENV TMPDIR="/tmp/"
