@@ -1,0 +1,111 @@
+name: Release
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+jobs:
+    GetLatestVersions:
+        runs-on: ubuntu-latest
+        outputs:
+          CHROME_VERSION: ${{ steps.versions.outputs.CHROME_VERSION }}
+          NUGET_PACKAGE_VERSION: ${{ steps.versions.outputs.NUGET_PACKAGE_VERSION }}
+        steps:
+        - uses: actions/checkout@v4.1.5
+    
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: '8.x'
+    
+        - name: Run Version Manager
+          id: versions
+          run: dotnet run -c Release --project ChromeForTesting/ChromeForTesting.VersionManager
+          env:
+            VERSION_INCREMENT: '1'
+
+    VerifyTagExists:
+        needs:
+        - GetLatestVersions
+        runs-on: ubuntu-latest
+        outputs:
+          exists: ${{ steps.checkReleaseExists.outputs.exists }}
+        env:
+          NUGET_PACKAGE_VERSION: ${{ needs.GetLatestVersions.outputs.NUGET_PACKAGE_VERSION }}
+        steps:
+        - uses: mukunku/tag-exists-action@v1.6.0
+          id: checkReleaseExists
+          with: 
+            tag: v${{ env.NUGET_PACKAGE_VERSION }}
+
+    Archive-Linux64:
+        needs:
+        - GetLatestVersions
+        - VerifyTagExists
+        if: ${{ needs.VerifyTagExists.outputs.exists == 'false' }}
+        runs-on: ubuntu-latest
+        env:
+          CHROME_VERSION: ${{ needs.GetLatestVersions.outputs.CHROME_VERSION }}
+        steps:
+        - uses: actions/checkout@v4.1.5
+
+        - name: Build archive
+          run: |
+            set -e
+
+            docker build . -f Dockerfile.BuildLinux -t chrome-linux64:latest --build-arg CHROME_VERSION=${{ env.CHROME_VERSION }}
+            docker create --name chrome-linux64 chrome-linux64:latest
+            docker cp chrome-linux64:/chrome-linux64.tar.gz chrome-linux64-${CHROME_VERSION}.tar.gz
+
+        - name: Upload Artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: chrome-linux64
+            path: chrome-linux64-${{ env.CHROME_VERSION }}.tar.gz
+
+    Release:
+        needs:
+        - GetLatestVersions
+        - Archive-Linux64
+        runs-on: ubuntu-latest
+        env:
+          CHROME_VERSION: ${{ needs.GetLatestVersions.outputs.CHROME_VERSION }}
+          NUGET_PACKAGE_VERSION: ${{ needs.GetLatestVersions.outputs.NUGET_PACKAGE_VERSION }}
+        steps:
+        - uses: actions/checkout@v4.1.5
+
+        - uses: actions/download-artifact@v4
+          with:
+            name: chrome-linux64
+            path: chrome-linux64
+
+        - run: |
+            set -e
+            gh release create v${{ env.NUGET_PACKAGE_VERSION }} --title "Chrome v${{ env.NUGET_PACKAGE_VERSION }}" \
+              chrome-linux64/chrome-linux64-${{ env.CHROME_VERSION }}.tar.gz
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+        # - name: Replace Version
+        #   run: |
+        #     set -e
+        #     sed 's/$(FirefoxVersion)/${{ env.FIREFOX_VERSION }}/g' -i packages/nuget/PortableFirefox/PortableFirefox/build/PortableFirefox.targets
+        #     sed 's/$(Version)/${{ env.NUGET_PACKAGE_VERSION }}/g' -i packages/nuget/PortableFirefox/PortableFirefox/build/PortableFirefox.targets
+
+        # - name: Setup .NET
+        #   uses: actions/setup-dotnet@v4
+        #   with:
+        #     dotnet-version: 6.x
+
+        # - name: Pack
+        #   working-directory: packages/nuget/PortableFirefox
+        #   run: dotnet pack PortableFirefox --configuration Release /p:Version=${{ env.NUGET_PACKAGE_VERSION }} /p:FirefoxVersion=${{ env.FIREFOX_VERSION }}
+
+        # - name: Publish nuget
+        #   working-directory: packages/nuget/PortableFirefox
+        #   run: dotnet nuget push PortableFirefox/bin/Release/PortableFirefox.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://www.nuget.org --skip-duplicate

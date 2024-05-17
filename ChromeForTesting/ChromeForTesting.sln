@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeForTesting", "ChromeForTesting\ChromeForTesting.csproj", "{7EDAC10C-00C5-45AE-9CA6-7EDF0F88AFF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeForTesting.VersionManager", "ChromeForTesting.VersionManager\ChromeForTesting.VersionManager.csproj", "{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EDAC10C-00C5-45AE-9CA6-7EDF0F88AFF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EDAC10C-00C5-45AE-9CA6-7EDF0F88AFF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EDAC10C-00C5-45AE-9CA6-7EDF0F88AFF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EDAC10C-00C5-45AE-9CA6-7EDF0F88AFF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
