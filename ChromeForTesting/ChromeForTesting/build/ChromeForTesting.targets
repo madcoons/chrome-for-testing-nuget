@@ -5,97 +5,147 @@
     </PropertyGroup>
     <Target Name="CleanChrome" BeforeTargets="Clean">
         <RemoveDir
-            Directories="$(OutDir)chrome-for-testing-$(Version)"
-            Condition="Exists('$(OutDir)chrome-for-testing-$(Version)')"
+                Directories="$(OutDir)chrome-for-testing-$(Version)"
+                Condition="Exists('$(OutDir)chrome-for-testing-$(Version)')"
         />
     </Target>
     <Target Name="DownloadChromeInBuild" AfterTargets="Build">
-        <MakeDir Directories="$(Cache)" Condition="!Exists('$(Cache)')" />
+        <MakeDir Directories="$(Cache)" Condition="!Exists('$(Cache)')"/>
         <MakeDir Directories="$(OutDir)chrome-for-testing-$(Version)"
-            Condition="!Exists('$(OutDir)chrome-for-testing-$(Version)')" />
-        <!-- Linux-->
-        <Exec Command="uname -m" ConsoleToMSBuild="true"
-            Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+                 Condition="!Exists('$(OutDir)chrome-for-testing-$(Version)')"/>
+
+        <!-- Linux -->
+        <Exec Command="uname -m"
+              ConsoleToMSBuild="true"
+              Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture"/>
         </Exec>
         <Error Text="Only x86_64 is supported on linux"
-            Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' != 'x86_64'" />
+               Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' != 'x86_64'"/>
         <PropertyGroup>
             <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' == 'x86_64'">linux64</ChromePlatrofm>
         </PropertyGroup>
         <DownloadFile
-            Condition="$([MSBuild]::IsOSPlatform('Linux'))"
-            SourceUrl="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
-            DestinationFolder="$(Cache)"
-            DestinationFileName="chrome-linux64.tar.gz">
+                Condition="$([MSBuild]::IsOSPlatform('Linux'))"
+                SourceUrl="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
+                DestinationFolder="$(Cache)"
+                DestinationFileName="chrome-linux64.tar.gz">
         </DownloadFile>
         <Exec
-            Command="tar -xf '$(Cache)chrome-linux64.tar.gz' -C '$(OutDir)chrome-for-testing-$(Version)'"
-            Condition="$([MSBuild]::IsOSPlatform('Linux')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome-root')" />
-        <!-- MacOS-->
-        <Exec Command="uname -m" ConsoleToMSBuild="true"
-            Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+                Command="tar -xf '$(Cache)chrome-linux64.tar.gz' -C '$(OutDir)chrome-for-testing-$(Version)'"
+                Condition="$([MSBuild]::IsOSPlatform('Linux')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome-root')"/>
+
+        <!-- MacOS -->
+        <Exec Command="uname -m"
+              ConsoleToMSBuild="true"
+              Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture"/>
         </Exec>
         <Error Text="Only x86_64 and arm64 are supported on mac"
-            Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' != 'x86_64' AND '$(OSArchitecture)' != 'arm64'" />
+               Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' != 'x86_64' AND '$(OSArchitecture)' != 'arm64'"/>
         <PropertyGroup>
             <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'arm64'">mac-arm64</ChromePlatrofm>
             <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'x86_64'">mac-x64</ChromePlatrofm>
         </PropertyGroup>
         <DownloadFile
-            Condition="$([MSBuild]::IsOSPlatform('OSX'))"
-            SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
-            DestinationFolder="$(Cache)"
-            DestinationFileName="chrome.zip">
+                Condition="$([MSBuild]::IsOSPlatform('OSX'))"
+                SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
+                DestinationFolder="$(Cache)"
+                DestinationFileName="chrome.zip">
         </DownloadFile>
         <Exec
-            Command="unzip '$(Cache)chrome.zip' -d '$(OutDir)chrome-for-testing-$(Version)'"
-            Condition="$([MSBuild]::IsOSPlatform('OSX')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')" />
+                Command="unzip '$(Cache)chrome.zip' -d '$(OutDir)chrome-for-testing-$(Version)'"
+                Condition="$([MSBuild]::IsOSPlatform('OSX')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')"/>
+
+        <!-- Windows -->
+        <Exec Command="powershell -NoProfile -Command &quot;[System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture&quot;"
+              ConsoleToMSBuild="true"
+              Condition="$([MSBuild]::IsOSPlatform('Windows_NT'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture"/>
+        </Exec>
+        <Error Text="Only x86 and x64 are supported on windows"
+               Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) AND '$(OSArchitecture)' != 'X86' AND '$(OSArchitecture)' != 'X64'"/>
+        <PropertyGroup>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) AND '$(OSArchitecture)' == 'X86'">win32</ChromePlatrofm>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) AND '$(OSArchitecture)' == 'X64'">win64</ChromePlatrofm>
+        </PropertyGroup>
+        <DownloadFile
+                Condition="$([MSBuild]::IsOSPlatform('Windows_NT'))"
+                SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
+                DestinationFolder="$(Cache)"
+                DestinationFileName="chrome.zip">
+        </DownloadFile>
+        <Exec
+                Command="powershell -Command &quot;Expand-Archive -Path '$(Cache)chrome.zip' -DestinationPath '$(OutDir)chrome-for-testing-$(Version)'&quot;"
+                Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome.exe')"/>
     </Target>
 
     <Target Name="DownloadChromeInPublish" AfterTargets="Publish">
-        <MakeDir Directories="$(Cache)" Condition="!Exists('$(Cache)')" />
+        <MakeDir Directories="$(Cache)" Condition="!Exists('$(Cache)')"/>
         <MakeDir Directories="$(PublishDir)chrome-for-testing-$(Version)"
-            Condition="!Exists('$(PublishDir)chrome-for-testing-$(Version)')" />
-        <!-- Linux-->
-        <Exec Command="uname -m" ConsoleToMSBuild="true"
-            Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+                 Condition="!Exists('$(PublishDir)chrome-for-testing-$(Version)')"/>
+        <!-- Linux -->
+        <Exec Command="uname -m"
+              ConsoleToMSBuild="true"
+              Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture"/>
         </Exec>
         <Error Text="Only x86_64 is supported on linux"
-            Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' != 'x86_64'" />
+               Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' != 'x86_64'"/>
         <PropertyGroup>
             <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' == 'x86_64'">linux64</ChromePlatrofm>
         </PropertyGroup>
         <DownloadFile
-            Condition="$([MSBuild]::IsOSPlatform('Linux'))"
-            SourceUrl="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
-            DestinationFolder="$(Cache)"
-            DestinationFileName="chrome-linux64.tar.gz">
+                Condition="$([MSBuild]::IsOSPlatform('Linux'))"
+                SourceUrl="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
+                DestinationFolder="$(Cache)"
+                DestinationFileName="chrome-linux64.tar.gz">
         </DownloadFile>
         <Exec
-            Command="tar -xf '$(Cache)chrome-linux64.tar.gz' -C '$(PublishDir)chrome-for-testing-$(Version)'"
-            Condition="$([MSBuild]::IsOSPlatform('Linux')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome-root')" />
-        <!-- MacOS-->
-        <Exec Command="uname -m" ConsoleToMSBuild="true"
-            Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+                Command="tar -xf '$(Cache)chrome-linux64.tar.gz' -C '$(PublishDir)chrome-for-testing-$(Version)'"
+                Condition="$([MSBuild]::IsOSPlatform('Linux')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome-root')"/>
+        <!-- MacOS -->
+        <Exec Command="uname -m"
+              ConsoleToMSBuild="true"
+              Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture"/>
         </Exec>
         <Error Text="Only x86_64 and arm64 are supported on mac"
-            Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' != 'x86_64' AND '$(OSArchitecture)' != 'arm64'" />
+               Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' != 'x86_64' AND '$(OSArchitecture)' != 'arm64'"/>
         <PropertyGroup>
             <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'arm64'">mac-arm64</ChromePlatrofm>
             <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'x86_64'">mac-x64</ChromePlatrofm>
         </PropertyGroup>
         <DownloadFile
-            Condition="$([MSBuild]::IsOSPlatform('OSX'))"
-            SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
-            DestinationFolder="$(Cache)"
-            DestinationFileName="chrome.zip">
+                Condition="$([MSBuild]::IsOSPlatform('OSX'))"
+                SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
+                DestinationFolder="$(Cache)"
+                DestinationFileName="chrome.zip">
         </DownloadFile>
         <Exec
-            Command="unzip '$(Cache)chrome.zip' -d '$(PublishDir)chrome-for-testing-$(Version)'"
-            Condition="$([MSBuild]::IsOSPlatform('OSX')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')" />
+                Command="unzip '$(Cache)chrome.zip' -d '$(PublishDir)chrome-for-testing-$(Version)'"
+                Condition="$([MSBuild]::IsOSPlatform('OSX')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')"/>
+
+        <!-- Windows -->
+        <Exec Command="powershell -NoProfile -Command &quot;[System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture&quot;"
+              ConsoleToMSBuild="true"
+              Condition="$([MSBuild]::IsOSPlatform('Windows_NT'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture"/>
+        </Exec>
+        <Error Text="Only x86 and x64 are supported on windows"
+               Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) AND '$(OSArchitecture)' != 'X86' AND '$(OSArchitecture)' != 'X64'"/>
+        <PropertyGroup>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) AND '$(OSArchitecture)' == 'X86'">win32</ChromePlatrofm>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) AND '$(OSArchitecture)' == 'X64'">win64</ChromePlatrofm>
+        </PropertyGroup>
+        <DownloadFile
+                Condition="$([MSBuild]::IsOSPlatform('Windows_NT'))"
+                SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
+                DestinationFolder="$(Cache)"
+                DestinationFileName="chrome.zip">
+        </DownloadFile>
+        <Exec
+                Command="powershell -Command &quot;Expand-Archive -Path '$(Cache)chrome.zip' -DestinationPath '$(PublishDir)chrome-for-testing-$(Version)'&quot;"
+                Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome.exe')"/>
     </Target>
 </Project>

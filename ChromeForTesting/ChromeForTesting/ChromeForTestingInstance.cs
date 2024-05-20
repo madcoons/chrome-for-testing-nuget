@@ -28,6 +28,10 @@ public partial class ChromeForTestingInstance
                 "MacOS",
                 "Google Chrome for Testing",
             ]),
+            (OS.Windows, _) => Path.Join([
+                AbsoluteRootPath,
+                "chrome.exe"
+            ]),
             _ => throw new($"Unsupported platform '{CurrentPlatform}'")
         };
 
