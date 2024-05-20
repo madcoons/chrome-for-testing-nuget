@@ -28,13 +28,6 @@ public partial class ChromeForTestingInstance
     private static string AbsoluteRootPath
         => Path.Join(AppDomain.CurrentDomain.BaseDirectory, "chrome-for-testing-" + NUGET_PACKAGE_VERSION);
 
-    private static string BinSubDir
-        => OperatingSystem.IsLinux()
-            ? Path.Join("firefox-root", "firefox-app")
-            : OperatingSystem.IsMacOS()
-                ? Path.Join("Firefox.app", "Contents", "MacOS")
-                : throw new("Unsupported platform.");
-
     private static string ChromePlatform
         => CurrentPlatform switch
         {

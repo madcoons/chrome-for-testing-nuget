@@ -29,7 +29,6 @@ int main(int argc, char *argv[]) {
     }
     new_argv[argc] = NULL;
 
-    // Execute Firefox
     execv(chrome_path, new_argv);
 
     perror("execv failed.");

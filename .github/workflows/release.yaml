@@ -27,7 +27,7 @@ jobs:
           id: versions
           run: dotnet run -c Release --project ChromeForTesting/ChromeForTesting.VersionManager
           env:
-            VERSION_INCREMENT: '3'
+            VERSION_INCREMENT: '4'
 
     VerifyTagExists:
         needs:
@@ -94,7 +94,7 @@ jobs:
         - name: Replace Version
           run: |
             set -e
-            sed 's/$(FirefoxVersion)/${{ env.CHROME_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/build/ChromeForTesting.targets
+            sed 's/$(ChromeVersion)/${{ env.CHROME_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/build/ChromeForTesting.targets
             sed 's/$(Version)/${{ env.NUGET_PACKAGE_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/build/ChromeForTesting.targets
 
         - name: Setup .NET
