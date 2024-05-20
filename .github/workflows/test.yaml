@@ -29,11 +29,11 @@ jobs:
 
     - name: Remove ChromeForTesting Nuget
       working-directory: ChromeForTesting
-      run: dotnet remove package ChromeForTesting --project ChromeForTesting.Tests
+      run: dotnet remove ChromeForTesting package ChromeForTesting
 
     - name: Install latest ChromeForTesting Nuget
       working-directory: ChromeForTesting
-      run: dotnet add package ChromeForTesting --project ChromeForTesting.Tests
+      run: dotnet add ChromeForTesting.Tests package ChromeForTesting
 
     - name: Run Tests
       working-directory: ChromeForTesting
