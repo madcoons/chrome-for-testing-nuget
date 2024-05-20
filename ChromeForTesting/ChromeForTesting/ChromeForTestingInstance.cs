@@ -30,6 +30,7 @@ public partial class ChromeForTestingInstance
             ]),
             (OS.Windows, _) => Path.Join([
                 AbsoluteRootPath,
+                $"chrome-{ChromePlatform}",
                 "chrome.exe"
             ]),
             _ => throw new($"Unsupported platform '{CurrentPlatform}'")
