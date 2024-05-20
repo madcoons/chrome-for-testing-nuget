@@ -14,13 +14,19 @@ public partial class ChromeForTestingInstance
     public static string ChromePath
         => CurrentPlatform switch
         {
+            (OS.Linux, _) => Path.Join([
+                AbsoluteRootPath,
+                "chrome-root",
+                "chrome",
+                "chrome-entry",
+            ]),
             (OS.MacOS, _) => Path.Join([
                 AbsoluteRootPath,
                 $"chrome-{ChromePlatform}",
                 "Google Chrome for Testing.app",
                 "Contents",
                 "MacOS",
-                "Google Chrome for Testing"
+                "Google Chrome for Testing",
             ]),
             _ => throw new($"Unsupported platform '{CurrentPlatform}'")
         };
