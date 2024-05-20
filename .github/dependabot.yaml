@@ -1,0 +1,23 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 20
+    groups:
+      "Github actions dependencies":
+        patterns:
+          - "*"
+
+  - package-ecosystem: "nuget"
+    directory: "/ChromeForTesting"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 20
+    groups:
+      "DotNet dependencies":
+        patterns:
+          - "*"
