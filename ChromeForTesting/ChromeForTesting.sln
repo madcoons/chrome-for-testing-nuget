@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeForTesting", "ChromeF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeForTesting.VersionManager", "ChromeForTesting.VersionManager\ChromeForTesting.VersionManager.csproj", "{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChromeForTesting.Tests", "ChromeForTesting.Tests\ChromeForTesting.Tests.csproj", "{A61C98BC-F4C0-4700-9E79-79D951D057D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DBA2013-2A31-4F1B-8869-1F47F0B603C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A61C98BC-F4C0-4700-9E79-79D951D057D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A61C98BC-F4C0-4700-9E79-79D951D057D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A61C98BC-F4C0-4700-9E79-79D951D057D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A61C98BC-F4C0-4700-9E79-79D951D057D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

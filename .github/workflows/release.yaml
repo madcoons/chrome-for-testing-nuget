@@ -27,7 +27,7 @@ jobs:
           id: versions
           run: dotnet run -c Release --project ChromeForTesting/ChromeForTesting.VersionManager
           env:
-            VERSION_INCREMENT: '1'
+            VERSION_INCREMENT: '2'
 
     VerifyTagExists:
         needs:
@@ -91,21 +91,21 @@ jobs:
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-        # - name: Replace Version
-        #   run: |
-        #     set -e
-        #     sed 's/$(FirefoxVersion)/${{ env.FIREFOX_VERSION }}/g' -i packages/nuget/PortableFirefox/PortableFirefox/build/PortableFirefox.targets
-        #     sed 's/$(Version)/${{ env.NUGET_PACKAGE_VERSION }}/g' -i packages/nuget/PortableFirefox/PortableFirefox/build/PortableFirefox.targets
+        - name: Replace Version
+          run: |
+            set -e
+            sed 's/$(FirefoxVersion)/${{ env.CHROME_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/build/ChromeForTesting.targets
+            sed 's/$(Version)/${{ env.NUGET_PACKAGE_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/build/ChromeForTesting.targets
 
-        # - name: Setup .NET
-        #   uses: actions/setup-dotnet@v4
-        #   with:
-        #     dotnet-version: 6.x
+        - name: Setup .NET
+          uses: actions/setup-dotnet@v4
+          with:
+            dotnet-version: 6.x
 
-        # - name: Pack
-        #   working-directory: packages/nuget/PortableFirefox
-        #   run: dotnet pack PortableFirefox --configuration Release /p:Version=${{ env.NUGET_PACKAGE_VERSION }} /p:FirefoxVersion=${{ env.FIREFOX_VERSION }}
+        - name: Pack
+          working-directory: ChromeForTesting
+          run: dotnet pack ChromeForTesting.csproj --configuration Release /p:Version=${{ env.NUGET_PACKAGE_VERSION }} /p:ChromeVersion=${{ env.CHROME_VERSION }}
 
-        # - name: Publish nuget
-        #   working-directory: packages/nuget/PortableFirefox
-        #   run: dotnet nuget push PortableFirefox/bin/Release/PortableFirefox.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://www.nuget.org --skip-duplicate
+        - name: Publish nuget
+          working-directory: ChromeForTesting
+          run: dotnet nuget push ChromeForTesting/bin/Release/ChromeForTesting.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://www.nuget.org --skip-duplicate

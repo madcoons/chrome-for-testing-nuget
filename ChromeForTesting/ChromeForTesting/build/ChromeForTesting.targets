@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <Cache>$(MSBuildThisFileDirectory)../.cache/</Cache>
+    </PropertyGroup>
+    <Target Name="CleanChrome" BeforeTargets="Clean">
+        <RemoveDir
+            Directories="$(OutDir)chrome-for-testing-$(Version)"
+            Condition="Exists('$(OutDir)chrome-for-testing-$(Version)')"
+        />
+    </Target>
+    <Target Name="DownloadChromeInBuild" AfterTargets="Build">
+        <MakeDir Directories="$(Cache)" Condition="!Exists('$(Cache)')" />
+        <MakeDir Directories="$(OutDir)chrome-for-testing-$(Version)"
+            Condition="!Exists('$(OutDir)chrome-for-testing-$(Version)')" />
+        <!-- Linux-->
+        <Exec Command="uname -m" ConsoleToMSBuild="true"
+            Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+        </Exec>
+        <Error Text="Only x86_64 is supported on linux"
+            Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' != 'x86_64'" />
+        <PropertyGroup>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' == 'x86_64'">linux64</ChromePlatrofm>
+        </PropertyGroup>
+        <DownloadFile
+            Condition="$([MSBuild]::IsOSPlatform('Linux'))"
+            SourceUrl="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
+            DestinationFolder="$(Cache)"
+            DestinationFileName="chrome-linux64.tar.gz">
+        </DownloadFile>
+        <Exec
+            Command="tar -xf '$(Cache)chrome-linux64.tar.gz' -C '$(OutDir)chrome-for-testing-$(Version)'"
+            Condition="$([MSBuild]::IsOSPlatform('Linux')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome-root')" />
+        <!-- MacOS-->
+        <Exec Command="uname -m" ConsoleToMSBuild="true"
+            Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+        </Exec>
+        <Error Text="Only x86_64 and arm64 are supported on mac"
+            Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' != 'x86_64' AND '$(OSArchitecture)' != 'arm64'" />
+        <PropertyGroup>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'arm64'">mac-arm64</ChromePlatrofm>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'x86_64'">mac-x64</ChromePlatrofm>
+        </PropertyGroup>
+        <DownloadFile
+            Condition="$([MSBuild]::IsOSPlatform('OSX'))"
+            SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
+            DestinationFolder="$(Cache)"
+            DestinationFileName="chrome.zip">
+        </DownloadFile>
+        <Exec
+            Command="unzip '$(Cache)chrome.zip' -d '$(OutDir)chrome-for-testing-$(Version)'"
+            Condition="$([MSBuild]::IsOSPlatform('OSX')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')" />
+    </Target>
+
+    <Target Name="DownloadChromeInPublish" AfterTargets="Publish">
+        <MakeDir Directories="$(Cache)" Condition="!Exists('$(Cache)')" />
+        <MakeDir Directories="$(PublishDir)chrome-for-testing-$(Version)"
+            Condition="!Exists('$(PublishDir)chrome-for-testing-$(Version)')" />
+        <!-- Linux-->
+        <Exec Command="uname -m" ConsoleToMSBuild="true"
+            Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+        </Exec>
+        <Error Text="Only x86_64 is supported on linux"
+            Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' != 'x86_64'" />
+        <PropertyGroup>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('Linux')) AND '$(OSArchitecture)' == 'x86_64'">linux64</ChromePlatrofm>
+        </PropertyGroup>
+        <DownloadFile
+            Condition="$([MSBuild]::IsOSPlatform('Linux'))"
+            SourceUrl="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
+            DestinationFolder="$(Cache)"
+            DestinationFileName="chrome-linux64.tar.gz">
+        </DownloadFile>
+        <Exec
+            Command="tar -xf '$(Cache)chrome-linux64.tar.gz' -C '$(PublishDir)chrome-for-testing-$(Version)'"
+            Condition="$([MSBuild]::IsOSPlatform('Linux')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome-root')" />
+        <!-- MacOS-->
+        <Exec Command="uname -m" ConsoleToMSBuild="true"
+            Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OSArchitecture" />
+        </Exec>
+        <Error Text="Only x86_64 and arm64 are supported on mac"
+            Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' != 'x86_64' AND '$(OSArchitecture)' != 'arm64'" />
+        <PropertyGroup>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'arm64'">mac-arm64</ChromePlatrofm>
+            <ChromePlatrofm Condition="$([MSBuild]::IsOSPlatform('OSX')) AND '$(OSArchitecture)' == 'x86_64'">mac-x64</ChromePlatrofm>
+        </PropertyGroup>
+        <DownloadFile
+            Condition="$([MSBuild]::IsOSPlatform('OSX'))"
+            SourceUrl="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/$(ChromePlatrofm)/chrome-$(ChromePlatrofm).zip"
+            DestinationFolder="$(Cache)"
+            DestinationFileName="chrome.zip">
+        </DownloadFile>
+        <Exec
+            Command="unzip '$(Cache)chrome.zip' -d '$(PublishDir)chrome-for-testing-$(Version)'"
+            Condition="$([MSBuild]::IsOSPlatform('OSX')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')" />
+    </Target>
+</Project>
