@@ -27,7 +27,7 @@ jobs:
           id: versions
           run: dotnet run -c Release --project ChromeForTesting/ChromeForTesting.VersionManager
           env:
-            VERSION_INCREMENT: '2'
+            VERSION_INCREMENT: '3'
 
     VerifyTagExists:
         needs:
@@ -104,7 +104,7 @@ jobs:
 
         - name: Pack
           working-directory: ChromeForTesting
-          run: dotnet pack ChromeForTesting.csproj --configuration Release /p:Version=${{ env.NUGET_PACKAGE_VERSION }} /p:ChromeVersion=${{ env.CHROME_VERSION }}
+          run: dotnet pack ChromeForTesting --configuration Release /p:Version=${{ env.NUGET_PACKAGE_VERSION }} /p:ChromeVersion=${{ env.CHROME_VERSION }}
 
         - name: Publish nuget
           working-directory: ChromeForTesting
