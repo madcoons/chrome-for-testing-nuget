@@ -77,7 +77,7 @@
         </DownloadFile>
         <Exec
                 Command="powershell -Command &quot;Expand-Archive -Path '$(Cache)chrome.zip' -DestinationPath '$(OutDir)chrome-for-testing-$(Version)'&quot;"
-                Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome.exe')"/>
+                Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) And !Exists('$(OutDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')"/>
     </Target>
 
     <Target Name="DownloadChromeInPublish" AfterTargets="Publish">
@@ -146,6 +146,6 @@
         </DownloadFile>
         <Exec
                 Command="powershell -Command &quot;Expand-Archive -Path '$(Cache)chrome.zip' -DestinationPath '$(PublishDir)chrome-for-testing-$(Version)'&quot;"
-                Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome.exe')"/>
+                Condition="$([MSBuild]::IsOSPlatform('Windows_NT')) And !Exists('$(PublishDir)chrome-for-testing-$(Version)/chrome-$(ChromePlatrofm)')"/>
     </Target>
 </Project>
