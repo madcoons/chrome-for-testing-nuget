@@ -25,11 +25,16 @@ Version chromeVersion = Version.Parse(stableVersion);
 
 await SetOutputAsync("CHROME_VERSION", chromeVersion.ToString());
 
-Version nugetPackageVersion = new(chromeVersion.Major, chromeVersion.Minor, chromeVersion.Build,
-    chromeVersion.Revision == -1
-        ? versionIncrement
-        : chromeVersion.Revision * Convert.ToInt32(Math.Pow(10, Convert.ToInt32(Math.Log10(versionIncrement)) + 2)) +
-          versionIncrement);
+int versionIncrementNumOfDigits = Convert.ToInt32(Math.Floor(Math.Log10(versionIncrement))) + 1;
+int suffixNumOfDigits = versionIncrementNumOfDigits + 1;
+int revisionMultiplier = Convert.ToInt32(Math.Pow(10, suffixNumOfDigits));
+
+Version nugetPackageVersion = new(
+    chromeVersion.Major,
+    chromeVersion.Minor,
+    chromeVersion.Build,
+    chromeVersion.Revision == -1 ? versionIncrement : chromeVersion.Revision * revisionMultiplier + versionIncrement
+);
 
 await SetOutputAsync("NUGET_PACKAGE_VERSION", nugetPackageVersion.ToString());
 
