@@ -28,11 +28,7 @@ jobs:
       with:
         dotnet-version: '6.x'
 
-    - name: Remove ChromeForTesting Nuget
-      working-directory: ChromeForTesting
-      run: dotnet remove ChromeForTesting.Tests package ChromeForTesting
-
-    - name: Install latest ChromeForTesting Nuget
+    - name: Update to latest ChromeForTesting Nuget
       working-directory: ChromeForTesting
       run: dotnet add ChromeForTesting.Tests package ChromeForTesting
 
