@@ -27,7 +27,7 @@ jobs:
           id: versions
           run: dotnet run -c Release --project ChromeForTesting/ChromeForTesting.VersionManager
           env:
-            VERSION_INCREMENT: '11'
+            VERSION_INCREMENT: '12'
 
     VerifyTagExists:
         needs:
