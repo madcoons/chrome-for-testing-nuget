@@ -10,6 +10,7 @@
 
     <PropertyGroup>
         <PackageId>ChromeForTesting</PackageId>
+        <Description>Chrome for Testing binary distributed as nuget package. It has all you need to start Chrome on server/local without any installation on system or downloading in runtime, it works even in scratch Docker image.</Description>
         <Version Condition=" '$(Configuration)' == 'Debug' ">125.0.6422.6001</Version>
         <Authors>MyDesigns Devs</Authors>
         <Company>MyDesigns</Company>
