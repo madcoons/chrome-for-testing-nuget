@@ -11,7 +11,7 @@
     <PropertyGroup>
         <PackageId>ChromeForTesting</PackageId>
         <Description>Chrome for Testing binary distributed as nuget package. It has all you need to start Chrome on server/local without any installation on system or downloading in runtime, it works even in scratch Docker image.</Description>
-        <Version Condition=" '$(Configuration)' == 'Debug' ">125.0.6422.6001</Version>
+        <Version Condition=" '$(Configuration)' == 'Debug' ">125.0.6422.600111</Version>
         <Authors>MyDesigns Devs</Authors>
         <Company>MyDesigns</Company>
         <RepositoryUrl>https://github.com/madcoons/chrome-for-testing-nuget.git</RepositoryUrl>
@@ -20,6 +20,7 @@
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
         <PackageTags>Chrome;ChromeForTesting;Browser;Portable;No-Installation;Cross-Platform</PackageTags>
         <PackageIcon>icon.png</PackageIcon>
+        <AssemblyVersion>$(ChromeVersion)</AssemblyVersion><!-- Version Revision can be greater then limit of 6422 so using ChromeVersion instead -->
     </PropertyGroup>
 
     <Target Name="GenerateVersionConstant" BeforeTargets="BeforeCompile">
