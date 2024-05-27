@@ -94,8 +94,8 @@ jobs:
         - name: Replace Version
           run: |
             set -e
-            sed 's/$(ChromeVersion)/${{ env.CHROME_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/build/ChromeForTesting.targets
-            sed 's/$(Version)/${{ env.NUGET_PACKAGE_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/build/ChromeForTesting.targets
+            sed 's/$(ChromeVersion)/${{ env.CHROME_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/buildTransitive/ChromeForTesting.props
+            sed 's/$(Version)/${{ env.NUGET_PACKAGE_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/buildTransitive/ChromeForTesting.props
 
         - name: Setup .NET
           uses: actions/setup-dotnet@v4
