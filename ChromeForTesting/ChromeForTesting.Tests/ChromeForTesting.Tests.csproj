@@ -10,7 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ChromeForTesting" Version="125.0.6422.78023" />
+        <PackageReference Include="ChromeForTesting" Version="125.0.6422.78024" />
         <PackageReference Include="CliWrap" Version="3.6.6"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0"/>
         <PackageReference Include="NUnit" Version="4.1.0"/>

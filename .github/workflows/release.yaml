@@ -27,7 +27,7 @@ jobs:
           id: versions
           run: dotnet run -c Release --project ChromeForTesting/ChromeForTesting.VersionManager
           env:
-            VERSION_INCREMENT: '24'
+            VERSION_INCREMENT: '25'
 
     VerifyTagExists:
         needs:
@@ -58,8 +58,8 @@ jobs:
           run: |
             set -e
 
-            docker build . -f Dockerfile.BuildLinux64 -t chrome-linux64:latest --build-arg CHROME_VERSION=${{ env.CHROME_VERSION }}
-            docker create --name chrome-linux64 chrome-linux64:latest
+            docker build . -f Dockerfile.BuildLinux64 -t chrome-linux64:latest --platform linux/amd64 --build-arg CHROME_VERSION=${{ env.CHROME_VERSION }}
+            docker create --name chrome-linux64 --platform linux/amd64 chrome-linux64:latest
             docker cp chrome-linux64:/chrome-linux64.tar.gz chrome-linux64.tar.gz
 
         - name: Upload Artifact
