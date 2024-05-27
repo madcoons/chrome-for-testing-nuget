@@ -44,12 +44,17 @@ public partial class ChromeForTestingInstance
 
     <ItemGroup>
         <None Include="../../README.md" Pack="true" PackagePath="/"/>
-        <None Include="build/ChromeForTesting.targets" pack="true" PackagePath="build/"/>
-        <None Include="build/ChromeForTesting.targets" Pack="true" PackagePath="buildMultiTargeting/"/>
-        <None Include="build/ChromeForTesting.targets" Pack="true" PackagePath="buildTransitive/"/>
+        <None Include="buildTransitive/ChromeForTesting.props" Pack="true" PackagePath="buildTransitive/" />
         <None Include="icon.png" Pack="true" PackagePath="/"/>
         <Compile Include="$(IntermediateOutputPath)ChromeForTestingInstance.Version.cs"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DownloadArchive" Version="1.0.10">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
     
-    <Import Project="$(MSBuildThisFileDirectory)/build/ChromeForTesting.targets" Condition=" '$(Configuration)' == 'Debug' " />
+    <Import Project="buildTransitive/ChromeForTesting.props" Condition=" '$(Configuration)' == 'Debug' " />
 </Project>

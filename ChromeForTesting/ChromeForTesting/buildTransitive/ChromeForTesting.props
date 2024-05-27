@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <DownlaodArchive
+                Include="chrome-for-testing-$(Version)"
+                Visible="false"
+                RID-linux-x64="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
+                RID-osx-arm64="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/mac-arm64/chrome-mac-arm64.zip"
+                RID-osx-x64="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/mac-x64/chrome-mac-x64.zip"
+                RID-win-x64="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/win64/chrome-win64.zip"
+                RID-win-x86="https://storage.googleapis.com/chrome-for-testing-public/$(ChromeVersion)/win32/chrome-win32.zip"
+        />
+    </ItemGroup>
+</Project>
