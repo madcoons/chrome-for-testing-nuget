@@ -16,12 +16,14 @@ public partial class ChromeForTestingInstance
         {
             (OS.Linux, _) => Path.Join([
                 AbsoluteRootPath,
+                RuntimeInformation.RuntimeIdentifier,
                 "chrome-root",
                 "chrome",
                 "chrome-entry",
             ]),
             (OS.MacOS, _) => Path.Join([
                 AbsoluteRootPath,
+                RuntimeInformation.RuntimeIdentifier,
                 $"chrome-{ChromePlatform}",
                 "Google Chrome for Testing.app",
                 "Contents",
@@ -30,6 +32,7 @@ public partial class ChromeForTestingInstance
             ]),
             (OS.Windows, _) => Path.Join([
                 AbsoluteRootPath,
+                RuntimeInformation.RuntimeIdentifier,
                 $"chrome-{ChromePlatform}",
                 "chrome.exe"
             ]),
