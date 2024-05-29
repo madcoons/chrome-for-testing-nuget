@@ -71,7 +71,7 @@ RUN rm convert-absolute-to-relative-links.sh
 COPY --from=chrome-app /chrome /chrome
 
 # Ensure chrome runs
-RUN /chrome/chrome --no-sandbox --headless --screenshot=/chrome-screenshot.png --window-size=500x500 --disable-dev-shm-usage "https://www.google.com"
+RUN /chrome/chrome --no-sandbox --headless=new --screenshot=/chrome-screenshot.png --window-size=500x500 --disable-dev-shm-usage "https://www.google.com"
 
 
 # We need this wrapper to start chrome with additional env variables
@@ -99,19 +99,22 @@ ENV TMPDIR="/tmp/"
 COPY --from=ubuntu-with-chrome-deps /tmp /tmp
 
 # Ensure it is running
-# RUN LD_LIBRARY_PATH=/chrome-root/lib/x86_64-linux-gnu FONTCONFIG_SYSROOT=/chrome-root ./chrome --no-sandbox --headless --screenshot=image.png --window-size=500x500 --enable-logging --v=2 --user-data-dir=/tmp --disable-dev-shm-usage "https://www.google.com"
+# RUN LD_LIBRARY_PATH=/chrome-root/lib/x86_64-linux-gnu FONTCONFIG_SYSROOT=/chrome-root ./chrome --no-sandbox --headless=new --screenshot=image.png --window-size=500x500 --enable-logging --v=2 --user-data-dir=/tmp --disable-dev-shm-usage "https://www.google.com"
 
 
 ##################################
 FROM scratch as final-chrome-root-tested
 COPY --from=final-chrome-root /chrome-root /chrome-root
+COPY local.conf /chrome-root/etc/fonts
 
 ENV TMPDIR="/tmp/"
 COPY --from=ubuntu-with-chrome-deps /tmp /tmp
 
 # Ensure it is running from chrome-entry
-RUN ["/chrome-root/chrome/chrome-entry", "--no-sandbox", "--headless", "--screenshot=image.png", "--window-size=500x500", "--user-data-dir=/tmp", "--disable-dev-shm-usage", "https://www.google.com"]
-
+# ENV FC_DEBUG=8191
+# ENV FC_DEBUG=24
+# ENV FC_DEBUG=16
+RUN ["/chrome-root/chrome/chrome-entry", "--single-process", "--no-sandbox", "--no-zygote", "--headless=new", "--screenshot=image.png", "--window-size=500x500", "--user-data-dir=/tmp", "--disable-dev-shm-usage", "https://www.google.com"]
 
 #################################
 FROM ubuntu:22.04
@@ -126,5 +129,5 @@ RUN tar -czvf /chrome-linux64.tar.gz /chrome-root
 
 #################################
 # FROM scratch
-# COPY --from=final-chrome-root /chrome-root /chrome-root
-# ENTRYPOINT [ "/chrome-root/chrome-linux64/chrome-entry" ]
+# COPY --from=final-chrome-root-tested /chrome-root /chrome-root
+# ENTRYPOINT [ "/chrome-root/chrome/chrome-entry" ]

@@ -10,12 +10,21 @@ int main(int argc, char *argv[]) {
     // Construct paths
     char ld_library_path[1024];
     snprintf(ld_library_path, sizeof(ld_library_path), "%s/../lib/x86_64-linux-gnu", appdir);
-    char fontconfig_sysroot[1024];
-    snprintf(fontconfig_sysroot, sizeof(fontconfig_sysroot), "%s/../", appdir);
+
+    // char fontconfig_sysroot[1024];
+    // snprintf(fontconfig_sysroot, sizeof(fontconfig_sysroot), "%s/../", appdir);
+
+    char fontconfig_path[1024];
+    snprintf(fontconfig_path, sizeof(fontconfig_path), "%s/../etc/fonts", appdir);
+
+    // char fontconfig_file[1024];
+    // snprintf(fontconfig_file, sizeof(fontconfig_file), "%s/../etc/fonts/fonts.conf", appdir);
 
     // Set environment variables
     setenv("LD_LIBRARY_PATH", ld_library_path, 1);
-    setenv("FONTCONFIG_SYSROOT", fontconfig_sysroot, 1);
+    // setenv("FONTCONFIG_SYSROOT", fontconfig_sysroot, 1);
+    setenv("FONTCONFIG_PATH", fontconfig_path, 1);
+    // setenv("FONTCONFIG_FILE", fontconfig_file, 1);
 
     // Change to the application directory
     chdir(appdir);
