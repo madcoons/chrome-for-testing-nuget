@@ -16,7 +16,7 @@ jobs:
           CHROME_VERSION: ${{ steps.versions.outputs.CHROME_VERSION }}
           NUGET_PACKAGE_VERSION: ${{ steps.versions.outputs.NUGET_PACKAGE_VERSION }}
         steps:
-        - uses: actions/checkout@v4.1.6
+        - uses: actions/checkout@v4.1.7
     
         - name: Setup .NET
           uses: actions/setup-dotnet@v4
@@ -52,7 +52,7 @@ jobs:
         env:
           CHROME_VERSION: ${{ needs.GetLatestVersions.outputs.CHROME_VERSION }}
         steps:
-        - uses: actions/checkout@v4.1.6
+        - uses: actions/checkout@v4.1.7
 
         - name: Build archive
           run: |
@@ -77,7 +77,7 @@ jobs:
           CHROME_VERSION: ${{ needs.GetLatestVersions.outputs.CHROME_VERSION }}
           NUGET_PACKAGE_VERSION: ${{ needs.GetLatestVersions.outputs.NUGET_PACKAGE_VERSION }}
         steps:
-        - uses: actions/checkout@v4.1.6
+        - uses: actions/checkout@v4.1.7
 
         - uses: actions/download-artifact@v4
           with:
