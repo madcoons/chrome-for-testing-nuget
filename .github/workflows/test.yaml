@@ -19,7 +19,7 @@ jobs:
             arch: x64
       fail-fast: false
     steps:
-    - uses: actions/checkout@v4.1.7
+    - uses: actions/checkout@v4.2.2
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
