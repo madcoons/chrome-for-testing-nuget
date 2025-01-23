@@ -21,13 +21,13 @@ jobs:
         - name: Setup .NET
           uses: actions/setup-dotnet@v4
           with:
-            dotnet-version: '8.x'
+            dotnet-version: '9.x'
     
         - name: Run Version Manager
           id: versions
           run: dotnet run -c Release --project ChromeForTesting/ChromeForTesting.VersionManager
           env:
-            VERSION_INCREMENT: '32'
+            VERSION_INCREMENT: '33'
 
     VerifyTagExists:
         needs:
@@ -100,7 +100,7 @@ jobs:
         - name: Setup .NET
           uses: actions/setup-dotnet@v4
           with:
-            dotnet-version: 8.x
+            dotnet-version: 9.x
 
         - name: Pack
           working-directory: ChromeForTesting
