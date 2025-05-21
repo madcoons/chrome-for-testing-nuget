@@ -70,16 +70,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    // --- Build VK_DRIVER_PATH ---
-    char icd_dir_path[PATH_MAX];
-    snprintf(icd_dir_path, sizeof(icd_dir_path), "%s/../usr/share/vulkan/icd.d", appdir);
-    
-    DIR *dir = opendir(icd_dir_path);
-    if (!dir) {
-        perror("Failed to open icd.d directory");
-        return 1;
-    }
-
     // --- Set Vulkan-related environment variables ---
     build_vulkan_path_env("../usr/share/vulkan/icd.d", appdir, "VK_DRIVER_FILES");
     build_vulkan_path_env("../usr/share/vulkan/explicit_layer.d", appdir, "VK_LAYER_PATH");
