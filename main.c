@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
     }
 
     // --- Set Vulkan-related environment variables ---
-    build_vulkan_path_env("../usr/share/vulkan/icd.d", appdir, "VK_DRIVER_PATH");
+    build_vulkan_path_env("../usr/share/vulkan/icd.d", appdir, "VK_DRIVER_FILES");
     build_vulkan_path_env("../usr/share/vulkan/explicit_layer.d", appdir, "VK_LAYER_PATH");
     build_vulkan_path_env("../usr/share/vulkan/implicit_layer.d", appdir, "VK_IMPLICIT_LAYER_PATH");
 

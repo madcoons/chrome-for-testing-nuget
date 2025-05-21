@@ -29,3 +29,7 @@ BufferedCommandResult res = await Cli.Wrap(ChromeForTestingInstance.ChromePath)
 Console.WriteLine($"Exit code: {res.ExitCode}");
 Console.WriteLine($"Output: {res.StandardOutput}");
 ```
+
+Notes:
+- GPU on Linux is tested only using Vulkan
+    - For AMD GPU copy `chrome-root/usr/share/libdrm/amdgpu.ids` to `/usr/share/libdrm/amdgpu.ids` unitil [this PR](https://gitlab.freedesktop.org/mesa/libdrm/-/merge_requests/273) is merged, released, deployed, ...
