@@ -1,4 +1,4 @@
-FROM ubuntu:22.04 as chrome-app
+FROM ubuntu:22.04 AS chrome-app
 
 RUN apt-get update -y && apt-get install -y unzip patchelf
 
@@ -24,7 +24,7 @@ RUN patchelf --set-rpath "${RPATH}" chrome_sandbox
 
 
 #################################
-FROM ubuntu:22.04 as ubuntu-with-chrome-deps
+FROM ubuntu:22.04 AS ubuntu-with-chrome-deps
 
 RUN apt-get update && apt-get install -y \
     # From https://source.chromium.org/chromium/chromium/src/+/main:chrome/installer/linux/debian/dist_package_versions.json
@@ -63,13 +63,16 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
     \
-#   Add gpu support using vulkan
+    #   Add gpu support using vulkan
     mesa-vulkan-drivers \
     && apt-get clean
 
 COPY convert-absolute-to-relative-links.sh .
 RUN ./convert-absolute-to-relative-links.sh /lib /etc /usr
 RUN rm convert-absolute-to-relative-links.sh
+
+# Fix Vulkan library paths
+RUN sed -i 's|/usr/lib/x86_64-linux-gnu/||g' /usr/share/vulkan/icd.d/*.json
 
 COPY --from=chrome-app /chrome /chrome
 
@@ -78,13 +81,14 @@ RUN /chrome/chrome --no-sandbox --headless=new --screenshot=/chrome-screenshot.p
 
 
 # We need this wrapper to start chrome with additional env variables
-FROM gcc:latest as entry-builder
+FROM alpine AS entry-builder
+RUN apk add build-base --no-cache
 COPY main.c .
 RUN gcc -o /chrome-entry main.c -static -O3
 
 
 #################################
-FROM ubuntu:22.04 as final-chrome-root
+FROM ubuntu:22.04 AS final-chrome-root
 # FROM scratch as final-chrome-root
 # chrome libs
 WORKDIR /chrome-root/
@@ -106,7 +110,7 @@ COPY --from=ubuntu-with-chrome-deps /tmp /tmp
 
 
 ##################################
-FROM scratch as final-chrome-root-tested
+FROM scratch AS final-chrome-root-tested
 COPY --from=final-chrome-root /chrome-root /chrome-root
 COPY local.conf /chrome-root/etc/fonts
 
