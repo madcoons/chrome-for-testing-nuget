@@ -10,12 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="ChromeForTesting" Version="135.0.7049.42033" />
+        <PackageReference Include="ChromeForTesting" Version="136.0.7103.113038" />
         <PackageReference Include="CliWrap" Version="3.8.2"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0"/>
         <PackageReference Include="NUnit" Version="4.3.2"/>
         <PackageReference Include="NUnit3TestAdapter" Version="5.0.0"/>
-        <PackageReference Include="NUnit.Analyzers" Version="4.7.0"/>
+        <PackageReference Include="NUnit.Analyzers" Version="4.8.0"/>
         <PackageReference Include="coverlet.collector" Version="6.0.4"/>
     </ItemGroup>
 
