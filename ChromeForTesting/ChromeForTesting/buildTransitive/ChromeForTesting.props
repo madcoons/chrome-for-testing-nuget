@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <ItemGroup>
-        <DownlaodArchive
+        <DownloadArchive
                 Include="chrome-for-testing-$(Version)"
                 Visible="false"
                 RID-linux-x64="https://github.com/madcoons/chrome-for-testing-nuget/releases/download/v$(Version)/chrome-linux64.tar.gz"
