@@ -50,7 +50,7 @@ public partial class ChromeForTestingInstance
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="DownloadArchive" Version="1.0.26" />
+      <PackageReference Include="DownloadArchive" Version="1.0.27" />
     </ItemGroup>
     
     <Import Project="buildTransitive/ChromeForTesting.props" Condition=" '$(Configuration)' == 'Debug' " />
