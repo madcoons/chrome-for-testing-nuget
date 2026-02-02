@@ -121,7 +121,7 @@ COPY --from=ubuntu-with-chrome-deps /tmp /tmp
 # ENV FC_DEBUG=8191
 # ENV FC_DEBUG=24
 # ENV FC_DEBUG=16
-RUN ["/chrome-root/chrome/chrome-entry", "--single-process", "--no-sandbox", "--no-zygote", "--headless=new", "--screenshot=image.png", "--window-size=500x500", "--user-data-dir=/tmp", "--disable-dev-shm-usage", "https://www.google.com"]
+RUN ["/chrome-root/chrome/chrome-entry", "--no-sandbox", "--no-zygote", "--headless=new", "--screenshot=image.png", "--window-size=500x500", "--disable-dev-shm-usage", "https://www.google.com"]
 
 #################################
 FROM ubuntu:22.04
