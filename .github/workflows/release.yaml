@@ -16,10 +16,10 @@ jobs:
           CHROME_VERSION: ${{ steps.versions.outputs.CHROME_VERSION }}
           NUGET_PACKAGE_VERSION: ${{ steps.versions.outputs.NUGET_PACKAGE_VERSION }}
         steps:
-        - uses: actions/checkout@v6.0.1
+        - uses: actions/checkout@v7.0.1
     
         - name: Setup .NET
-          uses: actions/setup-dotnet@v5
+          uses: actions/setup-dotnet@v6
           with:
             dotnet-version: '9.x'
     
@@ -52,7 +52,7 @@ jobs:
         env:
           CHROME_VERSION: ${{ needs.GetLatestVersions.outputs.CHROME_VERSION }}
         steps:
-        - uses: actions/checkout@v6.0.1
+        - uses: actions/checkout@v7.0.1
 
         - name: Build archive
           run: |
@@ -63,7 +63,7 @@ jobs:
             docker cp chrome-linux64:/chrome-linux64.tar.gz chrome-linux64.tar.gz
 
         - name: Upload Artifact
-          uses: actions/upload-artifact@v6
+          uses: actions/upload-artifact@v7
           with:
             name: chrome-linux64
             path: chrome-linux64.tar.gz
@@ -80,9 +80,9 @@ jobs:
           CHROME_VERSION: ${{ needs.GetLatestVersions.outputs.CHROME_VERSION }}
           NUGET_PACKAGE_VERSION: ${{ needs.GetLatestVersions.outputs.NUGET_PACKAGE_VERSION }}
         steps:
-        - uses: actions/checkout@v6.0.1
+        - uses: actions/checkout@v7.0.1
 
-        - uses: actions/download-artifact@v7
+        - uses: actions/download-artifact@v8
           with:
             name: chrome-linux64
             path: chrome-linux64
@@ -101,7 +101,7 @@ jobs:
             sed 's/$(Version)/${{ env.NUGET_PACKAGE_VERSION }}/g' -i ChromeForTesting/ChromeForTesting/buildTransitive/ChromeForTesting.props
 
         - name: Setup .NET
-          uses: actions/setup-dotnet@v5
+          uses: actions/setup-dotnet@v6
           with:
             dotnet-version: 9.x
 
