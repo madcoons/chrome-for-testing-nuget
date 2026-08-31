@@ -73,6 +73,9 @@ jobs:
         - GetLatestVersions
         - Archive-Linux64
         runs-on: ubuntu-latest
+        permissions:
+          contents: write # create the GitHub release
+          id-token: write # request the OIDC token for NuGet trusted publishing
         env:
           CHROME_VERSION: ${{ needs.GetLatestVersions.outputs.CHROME_VERSION }}
           NUGET_PACKAGE_VERSION: ${{ needs.GetLatestVersions.outputs.NUGET_PACKAGE_VERSION }}
@@ -106,6 +109,12 @@ jobs:
           working-directory: ChromeForTesting
           run: dotnet pack ChromeForTesting --configuration Release /p:Version=${{ env.NUGET_PACKAGE_VERSION }} /p:ChromeVersion=${{ env.CHROME_VERSION }}
 
+        - name: NuGet login
+          uses: NuGet/login@v1.2.0
+          id: nuget-login
+          with:
+            user: Miroljub
+
         - name: Publish nuget
           working-directory: ChromeForTesting
-          run: dotnet nuget push ChromeForTesting/bin/Release/ChromeForTesting.*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://www.nuget.org --skip-duplicate
+          run: dotnet nuget push ChromeForTesting/bin/Release/ChromeForTesting.*.nupkg -k ${{ steps.nuget-login.outputs.NUGET_API_KEY }} -s https://www.nuget.org --skip-duplicate
